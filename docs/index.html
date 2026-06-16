@@ -84,9 +84,8 @@
     gap: 6px !important;
 }
 
-/* Override flex when hidden — needed because display:flex !important beats inline display:none */
-#fpdContainer .fpd-filterbar-section.fpd-hidden,
-#fpdContainer #fpdCustomRange.fpd-hidden {
+/* Override flex when hidden — double-ID specificity beats single-class flex rule */
+#fpdContainer#fpdContainer .fpd-hidden {
     display: none !important;
 }
 
