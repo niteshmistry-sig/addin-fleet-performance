@@ -84,6 +84,12 @@
     gap: 6px !important;
 }
 
+/* Override flex when hidden — needed because display:flex !important beats inline display:none */
+#fpdContainer .fpd-filterbar-section.fpd-hidden,
+#fpdContainer #fpdCustomRange.fpd-hidden {
+    display: none !important;
+}
+
 #fpdContainer .fpd-filterbar-label {
     font-size: 11px !important;
     font-weight: 600 !important;
@@ -578,7 +584,7 @@
             </div>
 
             <!-- Custom date range (shown when Custom is active) -->
-            <div class="fpd-filterbar-section" id="fpdCustomRange" style="display:none;">
+            <div class="fpd-filterbar-section fpd-hidden" id="fpdCustomRange">
                 <input id="fpdFromDate" type="date" class="fpd-date" title="From">
                 <span class="fpd-date-sep">–</span>
                 <input id="fpdToDate" type="date" class="fpd-date" title="To">
@@ -1334,10 +1340,9 @@ geotab.addin.fleetPerformance = function () {
                 var days = parseInt(btn.getAttribute("data-fpd-days"), 10);
                 activeDays = days;
                 if (days === 0) {
-                    // Custom — show date pickers
-                    el.fpdCustomRange.style.display = "";
+                    el.fpdCustomRange.classList.remove("fpd-hidden");
                 } else {
-                    el.fpdCustomRange.style.display = "none";
+                    el.fpdCustomRange.classList.add("fpd-hidden");
                     setDatesFromDays(days);
                 }
             });

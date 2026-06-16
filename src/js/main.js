@@ -81,10 +81,9 @@ geotab.addin.fleetPerformance = function () {
                 var days = parseInt(btn.getAttribute("data-fpd-days"), 10);
                 activeDays = days;
                 if (days === 0) {
-                    // Custom — show date pickers
-                    el.fpdCustomRange.style.display = "";
+                    el.fpdCustomRange.classList.remove("fpd-hidden");
                 } else {
-                    el.fpdCustomRange.style.display = "none";
+                    el.fpdCustomRange.classList.add("fpd-hidden");
                     setDatesFromDays(days);
                 }
             });
