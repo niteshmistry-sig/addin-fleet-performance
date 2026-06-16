@@ -13,42 +13,53 @@
     <div id="fpdLoading" class="fpd-loading" style="display:none;">Loading data…</div>
 
     <!-- ── Error ───────────────────────────────────────────────────── -->
-    <div id="fpdError" class="fpd-error" style="display:none;">
-        <span id="fpdErrorMsg"></span>
-    </div>
+    <div id="fpdError" class="fpd-error" style="display:none;"><span id="fpdErrorMsg"></span></div>
+
 
     <!-- ══════════════════════════════════════════════════════════════ -->
     <!-- FLEET VIEW                                                     -->
     <!-- ══════════════════════════════════════════════════════════════ -->
     <div id="fpdFleetView">
 
-        <!-- Header -->
-        <div class="fpd-header">
-            <span class="fpd-title">🚛 Fleet Performance Dashboard</span>
-        </div>
-
         <!-- Filter Bar -->
-        <div class="fpd-filters">
-            <select id="fpdGroupSelect" title="Group">
-                <option value="">All Vehicles</option>
-            </select>
+        <div class="fpd-filterbar">
 
-            <input id="fpdSearchInput" type="text" placeholder="Search trucks…">
-
-            <div class="fpd-preset-group">
-                <button class="fpd-preset-btn" data-fpd-days="7">7d</button>
-                <button class="fpd-preset-btn fpd-preset-active" data-fpd-days="30">30d</button>
-                <button class="fpd-preset-btn" data-fpd-days="90">90d</button>
+            <!-- Timeframe presets -->
+            <div class="fpd-filterbar-section">
+                <span class="fpd-filterbar-label">Timeframe</span>
+                <div class="fpd-preset-group">
+                    <button class="fpd-preset-btn" data-fpd-days="1">Yesterday</button>
+                    <button class="fpd-preset-btn fpd-preset-active" data-fpd-days="7">Last 7 Days</button>
+                    <button class="fpd-preset-btn" data-fpd-days="30">Last 30 Days</button>
+                    <button class="fpd-preset-btn" data-fpd-days="0">Custom</button>
+                </div>
             </div>
 
-            <input id="fpdFromDate" type="date" title="From">
-            <span class="fpd-date-sep">→</span>
-            <input id="fpdToDate" type="date" title="To">
+            <!-- Custom date range (shown when Custom is active) -->
+            <div class="fpd-filterbar-section" id="fpdCustomRange" style="display:none;">
+                <input id="fpdFromDate" type="date" class="fpd-date" title="From">
+                <span class="fpd-date-sep">–</span>
+                <input id="fpdToDate" type="date" class="fpd-date" title="To">
+            </div>
+
+            <!-- Groups -->
+            <div class="fpd-filterbar-section">
+                <span class="fpd-filterbar-label">Groups</span>
+                <select id="fpdGroupSelect" class="fpd-select">
+                    <option value="">All Groups</option>
+                </select>
+            </div>
+
+            <!-- Vehicle search -->
+            <div class="fpd-filterbar-section">
+                <span class="fpd-filterbar-label">Vehicles</span>
+                <input id="fpdSearchInput" type="text" class="fpd-search" placeholder="Search units…">
+            </div>
 
             <button id="fpdApplyBtn" class="fpd-apply-btn">Apply</button>
         </div>
 
-        <!-- KPI Cards -->
+        <!-- KPI Summary Row -->
         <div class="fpd-kpis">
             <div class="fpd-kpi fpd-kpi-mpg">
                 <div class="fpd-kpi-label">⛽ Avg MPG</div>
@@ -63,43 +74,118 @@
             <div class="fpd-kpi fpd-kpi-idle" id="fpdKpiIdleCard">
                 <div class="fpd-kpi-label">🔴 Avg Idle %</div>
                 <div class="fpd-kpi-value" id="fpdKpiIdle">--</div>
-                <div class="fpd-kpi-sub">Target: &lt;5%</div>
+                <div class="fpd-kpi-sub">Target &lt;5%</div>
             </div>
             <div class="fpd-kpi fpd-kpi-count">
-                <div class="fpd-kpi-label">🚛 Trucks</div>
+                <div class="fpd-kpi-label">🚛 Units</div>
                 <div class="fpd-kpi-value" id="fpdKpiCount">--</div>
                 <div class="fpd-kpi-sub">With fuel data</div>
             </div>
         </div>
 
-        <!-- Chart -->
-        <div class="fpd-chart-card">
-            <canvas id="fpdTrendCanvas" width="900" height="200"></canvas>
+        <!-- Tab Navigation -->
+        <div class="fpd-tabs">
+            <button class="fpd-tab fpd-tab-active" data-fpd-tab="trend">MPG Trend</button>
+            <button class="fpd-tab" data-fpd-tab="table">Unit Detail</button>
         </div>
 
-        <!-- Table -->
-        <div class="fpd-table-card">
-            <div class="fpd-table-toolbar">
-                <span class="fpd-table-title">Per-Truck Breakdown</span>
-                <button id="fpdExportBtn" class="fpd-export-btn">⬇ Export CSV</button>
+        <!-- ── MPG Trend Panel ──────────────────────────────────── -->
+        <div id="fpdPanelTrend">
+            <div class="fpd-chart-area">
+                <div class="fpd-chart-toolbar">
+                    <span class="fpd-chart-title">MPG by Unit</span>
+                    <div class="fpd-chart-toggle">
+                        <button class="fpd-toggle-btn fpd-toggle-active" data-fpd-group="20">Top 20</button>
+                        <button class="fpd-toggle-btn" data-fpd-group="50">Top 50</button>
+                        <button class="fpd-toggle-btn" data-fpd-group="0">All</button>
+                    </div>
+                </div>
+                <canvas id="fpdTrendCanvas" width="900" height="220"></canvas>
             </div>
-            <table class="fpd-table">
-                <thead>
-                    <tr>
-                        <th data-fpd-sort="name">Truck</th>
-                        <th data-fpd-sort="miles">Miles</th>
-                        <th data-fpd-sort="fuelGallons">Fuel (gal)</th>
-                        <th data-fpd-sort="mpg" class="fpd-sort-desc">MPG</th>
-                        <th data-fpd-sort="engineHours">Eng Hrs</th>
-                        <th data-fpd-sort="idlePct">Idle %</th>
-                        <th data-fpd-sort="idleGallons">Idle Fuel (gal)</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody id="fpdTableBody">
-                    <tr><td colspan="8" class="fpd-empty">Select a date range and click Apply to load data.</td></tr>
-                </tbody>
-            </table>
+
+            <!-- Highest / Lowest tables below chart — matches CEL 3-col layout -->
+            <div style="display:flex; border-top:1px solid var(--fpd-border);">
+                <div style="flex:1; border-right:1px solid var(--fpd-border);">
+                    <div class="fpd-table-toolbar">
+                        <span style="font-size:12px;font-weight:600;">Best MPG</span>
+                    </div>
+                    <div class="fpd-table-wrap">
+                        <table class="fpd-table">
+                            <thead><tr>
+                                <th>UNIT</th>
+                                <th>MPG</th>
+                                <th>MILES</th>
+                            </tr></thead>
+                            <tbody id="fpdBestBody">
+                                <tr class="fpd-empty-row"><td colspan="3">No data</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div style="flex:1; border-right:1px solid var(--fpd-border);">
+                    <div class="fpd-table-toolbar">
+                        <span style="font-size:12px;font-weight:600;">Highest Idle %</span>
+                    </div>
+                    <div class="fpd-table-wrap">
+                        <table class="fpd-table">
+                            <thead><tr>
+                                <th>UNIT</th>
+                                <th>IDLE %</th>
+                                <th>IDLE GAL</th>
+                            </tr></thead>
+                            <tbody id="fpdIdleBody">
+                                <tr class="fpd-empty-row"><td colspan="3">No data</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div style="flex:1;">
+                    <div class="fpd-table-toolbar">
+                        <span style="font-size:12px;font-weight:600;">Most Engine Hours</span>
+                    </div>
+                    <div class="fpd-table-wrap">
+                        <table class="fpd-table">
+                            <thead><tr>
+                                <th>UNIT</th>
+                                <th>ENG HRS</th>
+                                <th>MILES</th>
+                            </tr></thead>
+                            <tbody id="fpdHoursBody">
+                                <tr class="fpd-empty-row"><td colspan="3">No data</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Unit Detail Panel ────────────────────────────────── -->
+        <div id="fpdPanelTable" style="display:none;">
+            <div class="fpd-table-toolbar">
+                <div class="fpd-table-search">
+                    <input id="fpdTableSearch" type="text" class="fpd-search" placeholder="Search units…" style="width:180px;">
+                </div>
+                <button id="fpdExportBtn" class="fpd-export-btn">Export CSV</button>
+            </div>
+            <div class="fpd-table-wrap">
+                <table class="fpd-table">
+                    <thead>
+                        <tr>
+                            <th data-fpd-sort="name">NAME</th>
+                            <th data-fpd-sort="miles">MILES</th>
+                            <th data-fpd-sort="fuelGallons">FUEL (GAL)</th>
+                            <th data-fpd-sort="mpg" class="fpd-sort-desc">MPG</th>
+                            <th data-fpd-sort="engineHours">ENGINE HRS</th>
+                            <th data-fpd-sort="idlePct">IDLE %</th>
+                            <th data-fpd-sort="idleGallons">IDLE FUEL (GAL)</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="fpdTableBody">
+                        <tr class="fpd-empty-row"><td colspan="8">Select filters and click Apply to load data.</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
     </div><!-- /fpdFleetView -->
@@ -112,23 +198,39 @@
 
         <div class="fpd-drill-header">
             <button id="fpdDrillBackBtn" class="fpd-back-btn">← Back</button>
-            <span id="fpdDrillTitle" class="fpd-drill-title">Truck Detail</span>
+            <span id="fpdDrillTitle" class="fpd-drill-title">Unit Detail</span>
         </div>
 
         <div class="fpd-drill-kpis">
-            <div class="fpd-drill-kpi" id="fpdDrillMPG">-- MPG</div>
-            <div class="fpd-drill-kpi" id="fpdDrillHours">-- hrs</div>
-            <div class="fpd-drill-kpi" id="fpdDrillIdle">-- idle</div>
+            <div class="fpd-drill-kpi">
+                <span class="fpd-drill-kpi-label">MPG</span>
+                <span id="fpdDrillMPG">--</span>
+            </div>
+            <div class="fpd-drill-kpi">
+                <span class="fpd-drill-kpi-label">Engine Hours</span>
+                <span id="fpdDrillHours">--</span>
+            </div>
+            <div class="fpd-drill-kpi">
+                <span class="fpd-drill-kpi-label">Idle %</span>
+                <span id="fpdDrillIdle">--</span>
+            </div>
+            <div class="fpd-drill-kpi">
+                <span class="fpd-drill-kpi-label">Miles</span>
+                <span id="fpdDrillMiles">--</span>
+            </div>
         </div>
 
-        <div class="fpd-chart-card">
-            <canvas id="fpdDrillCanvas" width="900" height="200"></canvas>
+        <div class="fpd-chart-area">
+            <div class="fpd-chart-toolbar">
+                <span class="fpd-chart-title">Daily MPG</span>
+            </div>
+            <canvas id="fpdDrillCanvas" width="900" height="220"></canvas>
         </div>
 
-        <div class="fpd-table-card" style="padding:16px;">
-            <div class="fpd-idle-list-title">Idling Events (most recent 20)</div>
+        <div class="fpd-idle-section">
+            <div class="fpd-idle-section-title">Idling Events (most recent 20)</div>
             <ul id="fpdDrillIdleList" class="fpd-idle-list">
-                <li>Loading…</li>
+                <li><span>Loading…</span></li>
             </ul>
         </div>
 
