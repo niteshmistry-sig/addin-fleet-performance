@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <rect width="48" height="48" rx="10" fill="#1976d2"/>
+  <!-- Truck body -->
+  <rect x="6" y="20" width="24" height="14" rx="2" fill="#fff" opacity="0.95"/>
+  <!-- Cab -->
+  <path d="M30 28 L30 20 L38 20 L42 26 L42 34 L30 34 Z" fill="#fff" opacity="0.95"/>
+  <!-- Windshield -->
+  <path d="M31 21 L31 26 L41 26 L38 21 Z" fill="#bbdefb"/>
+  <!-- Wheels -->
+  <circle cx="14" cy="34" r="4" fill="#1565c0"/>
+  <circle cx="14" cy="34" r="2" fill="#fff"/>
+  <circle cx="36" cy="34" r="4" fill="#1565c0"/>
+  <circle cx="36" cy="34" r="2" fill="#fff"/>
+  <!-- Fuel gauge bar -->
+  <rect x="8" y="14" width="20" height="3" rx="1.5" fill="#e3f2fd" opacity="0.6"/>
+  <rect x="8" y="14" width="14" height="3" rx="1.5" fill="#4fc3f7"/>
+</svg>

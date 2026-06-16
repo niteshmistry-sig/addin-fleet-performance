@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fleet Performance Dashboard</title>
+    <style>
+/*
+ * style.css — Fleet Performance Dashboard
+ * All selectors scoped under #fpdContainer for MyGeotab CSS isolation.
+ */
+
+:root {
+    --fpd-color-primary: #1976d2;
+    --fpd-color-primary-light: #e3f2fd;
+    --fpd-color-success: #2e7d32;
+    --fpd-color-success-light: #e8f5e9;
+    --fpd-color-warning: #ed6c02;
+    --fpd-color-warning-light: #fff3e0;
+    --fpd-color-error: #d32f2f;
+    --fpd-color-error-light: #ffebee;
+    --fpd-color-text: #212121;
+    --fpd-color-text-secondary: #616161;
+    --fpd-color-border: #e0e0e0;
+    --fpd-color-bg: #f5f5f5;
+    --fpd-color-surface: #ffffff;
+    --fpd-radius: 8px;
+    --fpd-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
+    --fpd-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --fpd-space-xs: 4px;
+    --fpd-space-sm: 8px;
+    --fpd-space-md: 16px;
+    --fpd-space-lg: 24px;
+    --fpd-space-xl: 32px;
+}
+
+#fpdContainer {
+    font-family: var(--fpd-font) !important;
+    color: var(--fpd-color-text) !important;
+    background: var(--fpd-color-bg) !important;
+    padding: var(--fpd-space-lg) !important;
+    min-height: 100% !important;
+    position: relative !important;
+    line-height: 1.5 !important;
+    font-size: 14px !important;
+}
+
+#fpdContainer#fpdContainer *, #fpdContainer#fpdContainer *::before, #fpdContainer#fpdContainer *::after {
+    box-sizing: border-box !important;
+}
+
+#fpdContainer#fpdContainer h1, #fpdContainer#fpdContainer h2, #fpdContainer#fpdContainer h3 {
+    font-family: var(--fpd-font) !important;
+    color: var(--fpd-color-text) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: none !important;
+}
+
+#fpdContainer#fpdContainer table {
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
+    width: 100% !important;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────── */
+
+#fpdContainer .fpd-header {
+    display: flex !important;
+    align-items: center !important;
+    gap: var(--fpd-space-md) !important;
+    margin-bottom: var(--fpd-space-lg) !important;
+}
+
+#fpdContainer .fpd-title {
+    font-size: 20px !important;
+    font-weight: 600 !important;
+    color: var(--fpd-color-text) !important;
+    flex: 1 !important;
+}
+
+/* ── Filter Bar ──────────────────────────────────────────────────────── */
+
+#fpdContainer .fpd-filters {
+    background: var(--fpd-color-surface) !important;
+    border-radius: var(--fpd-radius) !important;
+    box-shadow: var(--fpd-shadow) !important;
+    padding: var(--fpd-space-md) !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: var(--fpd-space-sm) !important;
+    align-items: center !important;
+    margin-bottom: var(--fpd-space-lg) !important;
+}
+
+#fpdContainer#fpdContainer .fpd-filters select,
+#fpdContainer#fpdContainer .fpd-filters input[type="text"],
+#fpdContainer#fpdContainer .fpd-filters input[type="date"] {
+    height: 36px !important;
+    padding: 0 var(--fpd-space-sm) !important;
+    border: 1px solid var(--fpd-color-border) !important;
+    border-radius: var(--fpd-radius) !important;
+    font-family: var(--fpd-font) !important;
+    font-size: 13px !important;
+    background: #fff !important;
+    color: var(--fpd-color-text) !important;
+    outline: none !important;
+}
+
+#fpdContainer .fpd-filters select { min-width: 160px !important; }
+#fpdContainer .fpd-filters input[type="text"] { min-width: 180px !important; }
+#fpdContainer .fpd-filters input[type="date"] { width: 140px !important; }
+
+#fpdContainer .fpd-preset-group {
+    display: flex !important;
+    gap: 2px !important;
+    border: 1px solid var(--fpd-color-border) !important;
+    border-radius: var(--fpd-radius) !important;
+    overflow: hidden !important;
+}
+
+#fpdContainer#fpdContainer .fpd-preset-btn {
+    padding: 0 var(--fpd-space-sm) !important;
+    height: 36px !important;
+    border: none !important;
+    background: #fff !important;
+    color: var(--fpd-color-text-secondary) !important;
+    font-family: var(--fpd-font) !important;
+    font-size: 13px !important;
+    cursor: pointer !important;
+}
+
+#fpdContainer#fpdContainer .fpd-preset-btn:hover { background: var(--fpd-color-primary-light) !important; }
+#fpdContainer#fpdContainer .fpd-preset-active {
+    background: var(--fpd-color-primary) !important;
+    color: #fff !important;
+}
+
+#fpdContainer .fpd-date-sep { color: var(--fpd-color-text-secondary) !important; font-size: 13px !important; }
+
+#fpdContainer#fpdContainer .fpd-apply-btn {
+    height: 36px !important;
+    padding: 0 var(--fpd-space-md) !important;
+    background: var(--fpd-color-primary) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: var(--fpd-radius) !important;
+    font-family: var(--fpd-font) !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+}
+
+#fpdContainer#fpdContainer .fpd-apply-btn:hover { background: #1565c0 !important; }
+
+/* ── KPI Cards ───────────────────────────────────────────────────────── */
+
+#fpdContainer .fpd-kpis {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
+    gap: var(--fpd-space-md) !important;
+    margin-bottom: var(--fpd-space-lg) !important;
+}
+
+#fpdContainer .fpd-kpi {
+    background: var(--fpd-color-surface) !important;
+    border-radius: var(--fpd-radius) !important;
+    box-shadow: var(--fpd-shadow) !important;
+    padding: var(--fpd-space-md) !important;
+    border-left: 4px solid var(--fpd-color-border) !important;
+}
+
+#fpdContainer .fpd-kpi-mpg { border-left-color: #1976d2 !important; }
+#fpdContainer .fpd-kpi-hours { border-left-color: #2e7d32 !important; }
+#fpdContainer .fpd-kpi-idle { border-left-color: #ff9800 !important; }
+#fpdContainer .fpd-kpi-idle.fpd-kpi-warn { border-left-color: #d32f2f !important; }
+#fpdContainer .fpd-kpi-count { border-left-color: #7b1fa2 !important; }
+
+#fpdContainer .fpd-kpi-label {
+    font-size: 11px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    color: var(--fpd-color-text-secondary) !important;
+    margin-bottom: var(--fpd-space-xs) !important;
+}
+
+#fpdContainer .fpd-kpi-value {
+    font-size: 28px !important;
+    font-weight: 700 !important;
+    color: var(--fpd-color-text) !important;
+    line-height: 1.1 !important;
+}
+
+#fpdContainer .fpd-kpi-sub {
+    font-size: 11px !important;
+    color: var(--fpd-color-text-secondary) !important;
+    margin-top: var(--fpd-space-xs) !important;
+}
+
+/* ── Chart Card ──────────────────────────────────────────────────────── */
+
+#fpdContainer .fpd-chart-card {
+    background: var(--fpd-color-surface) !important;
+    border-radius: var(--fpd-radius) !important;
+    box-shadow: var(--fpd-shadow) !important;
+    padding: var(--fpd-space-md) !important;
+    margin-bottom: var(--fpd-space-lg) !important;
+}
+
+#fpdContainer#fpdContainer canvas {
+    display: block !important;
+    width: 100% !important;
+    height: 200px !important;
+}
+
+/* ── Table Card ──────────────────────────────────────────────────────── */
+
+#fpdContainer .fpd-table-card {
+    background: var(--fpd-color-surface) !important;
+    border-radius: var(--fpd-radius) !important;
+    box-shadow: var(--fpd-shadow) !important;
+    overflow: hidden !important;
+    margin-bottom: var(--fpd-space-lg) !important;
+}
+
+#fpdContainer .fpd-table-toolbar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: var(--fpd-space-md) !important;
+    border-bottom: 1px solid var(--fpd-color-border) !important;
+}
+
+#fpdContainer .fpd-table-title { font-weight: 600 !important; font-size: 14px !important; }
+
+#fpdContainer#fpdContainer .fpd-export-btn {
+    padding: 6px var(--fpd-space-sm) !important;
+    border: 1px solid var(--fpd-color-border) !important;
+    border-radius: var(--fpd-radius) !important;
+    background: #fff !important;
+    font-family: var(--fpd-font) !important;
+    font-size: 12px !important;
+    cursor: pointer !important;
+    color: var(--fpd-color-text-secondary) !important;
+}
+
+#fpdContainer#fpdContainer .fpd-export-btn:hover { background: var(--fpd-color-bg) !important; }
+
+#fpdContainer#fpdContainer .fpd-table th {
+    background: var(--fpd-color-bg) !important;
+    padding: var(--fpd-space-sm) var(--fpd-space-md) !important;
+    text-align: left !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: var(--fpd-color-text-secondary) !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+    user-select: none !important;
+    border-bottom: 1px solid var(--fpd-color-border) !important;
+}
+
+#fpdContainer#fpdContainer .fpd-table th:hover { background: #eeeeee !important; }
+#fpdContainer#fpdContainer .fpd-table th.fpd-sort-desc::after { content: " ▼" !important; }
+#fpdContainer#fpdContainer .fpd-table th.fpd-sort-asc::after { content: " ▲" !important; }
+
+#fpdContainer#fpdContainer .fpd-table td {
+    padding: var(--fpd-space-sm) var(--fpd-space-md) !important;
+    border-bottom: 1px solid var(--fpd-color-border) !important;
+    font-size: 13px !important;
+    color: var(--fpd-color-text) !important;
+}
+
+#fpdContainer#fpdContainer .fpd-table .fpd-row:hover td { background: var(--fpd-color-primary-light) !important; }
+#fpdContainer#fpdContainer .fpd-table .fpd-warn { color: var(--fpd-color-warning) !important; font-weight: 600 !important; }
+#fpdContainer#fpdContainer .fpd-empty { text-align: center !important; padding: var(--fpd-space-xl) !important; color: var(--fpd-color-text-secondary) !important; }
+
+#fpdContainer#fpdContainer .fpd-drill-btn {
+    padding: 4px 10px !important;
+    border: 1px solid var(--fpd-color-primary) !important;
+    border-radius: var(--fpd-radius) !important;
+    background: #fff !important;
+    color: var(--fpd-color-primary) !important;
+    font-family: var(--fpd-font) !important;
+    font-size: 12px !important;
+    cursor: pointer !important;
+}
+
+#fpdContainer#fpdContainer .fpd-drill-btn:hover { background: var(--fpd-color-primary-light) !important; }
+
+/* ── Drill-Down View ─────────────────────────────────────────────────── */
+
+#fpdContainer .fpd-drill-header {
+    display: flex !important;
+    align-items: center !important;
+    gap: var(--fpd-space-md) !important;
+    margin-bottom: var(--fpd-space-lg) !important;
+}
+
+#fpdContainer#fpdContainer .fpd-back-btn {
+    padding: 6px var(--fpd-space-md) !important;
+    border: 1px solid var(--fpd-color-border) !important;
+    border-radius: var(--fpd-radius) !important;
+    background: #fff !important;
+    font-family: var(--fpd-font) !important;
+    font-size: 13px !important;
+    cursor: pointer !important;
+}
+
+#fpdContainer .fpd-drill-title { font-size: 18px !important; font-weight: 600 !important; }
+
+#fpdContainer .fpd-drill-kpis {
+    display: flex !important;
+    gap: var(--fpd-space-md) !important;
+    margin-bottom: var(--fpd-space-lg) !important;
+    flex-wrap: wrap !important;
+}
+
+#fpdContainer .fpd-drill-kpi {
+    background: var(--fpd-color-surface) !important;
+    border-radius: var(--fpd-radius) !important;
+    box-shadow: var(--fpd-shadow) !important;
+    padding: var(--fpd-space-md) var(--fpd-space-lg) !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    color: var(--fpd-color-primary) !important;
+}
+
+#fpdContainer .fpd-idle-list-title { font-weight: 600 !important; margin-bottom: var(--fpd-space-sm) !important; }
+
+#fpdContainer#fpdContainer .fpd-idle-list {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    max-height: 200px !important;
+    overflow-y: auto !important;
+}
+
+#fpdContainer#fpdContainer .fpd-idle-list li {
+    padding: var(--fpd-space-xs) 0 !important;
+    border-bottom: 1px solid var(--fpd-color-border) !important;
+    font-size: 13px !important;
+    color: var(--fpd-color-text-secondary) !important;
+}
+
+/* ── Loading / Error ─────────────────────────────────────────────────── */
+
+#fpdContainer .fpd-loading {
+    text-align: center !important;
+    padding: var(--fpd-space-xl) !important;
+    color: var(--fpd-color-text-secondary) !important;
+    font-size: 14px !important;
+}
+
+#fpdContainer .fpd-error {
+    background: var(--fpd-color-error-light) !important;
+    border-left: 4px solid var(--fpd-color-error) !important;
+    border-radius: var(--fpd-radius) !important;
+    padding: var(--fpd-space-md) !important;
+    margin-bottom: var(--fpd-space-md) !important;
+    color: var(--fpd-color-error) !important;
+    font-size: 13px !important;
+}
+
+</style>
+</head>
+<body>
+<div id="fpdContainer">
+
+    <!-- ── Loading ─────────────────────────────────────────────────── -->
+    <div id="fpdLoading" class="fpd-loading" style="display:none;">Loading data…</div>
+
+    <!-- ── Error ───────────────────────────────────────────────────── -->
+    <div id="fpdError" class="fpd-error" style="display:none;">
+        <span id="fpdErrorMsg"></span>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- FLEET VIEW                                                     -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <div id="fpdFleetView">
+
+        <!-- Header -->
+        <div class="fpd-header">
+            <span class="fpd-title">🚛 Fleet Performance Dashboard</span>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="fpd-filters">
+            <select id="fpdGroupSelect" title="Group">
+                <option value="">All Vehicles</option>
+            </select>
+
+            <input id="fpdSearchInput" type="text" placeholder="Search trucks…">
+
+            <div class="fpd-preset-group">
+                <button class="fpd-preset-btn" data-fpd-days="7">7d</button>
+                <button class="fpd-preset-btn fpd-preset-active" data-fpd-days="30">30d</button>
+                <button class="fpd-preset-btn" data-fpd-days="90">90d</button>
+            </div>
+
+            <input id="fpdFromDate" type="date" title="From">
+            <span class="fpd-date-sep">→</span>
+            <input id="fpdToDate" type="date" title="To">
+
+            <button id="fpdApplyBtn" class="fpd-apply-btn">Apply</button>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="fpd-kpis">
+            <div class="fpd-kpi fpd-kpi-mpg">
+                <div class="fpd-kpi-label">⛽ Avg MPG</div>
+                <div class="fpd-kpi-value" id="fpdKpiMPG">--</div>
+                <div class="fpd-kpi-sub">Fleet average</div>
+            </div>
+            <div class="fpd-kpi fpd-kpi-hours">
+                <div class="fpd-kpi-label">⏱ Engine Hours</div>
+                <div class="fpd-kpi-value" id="fpdKpiHours">--</div>
+                <div class="fpd-kpi-sub">Total for period</div>
+            </div>
+            <div class="fpd-kpi fpd-kpi-idle" id="fpdKpiIdleCard">
+                <div class="fpd-kpi-label">🔴 Avg Idle %</div>
+                <div class="fpd-kpi-value" id="fpdKpiIdle">--</div>
+                <div class="fpd-kpi-sub">Target: &lt;5%</div>
+            </div>
+            <div class="fpd-kpi fpd-kpi-count">
+                <div class="fpd-kpi-label">🚛 Trucks</div>
+                <div class="fpd-kpi-value" id="fpdKpiCount">--</div>
+                <div class="fpd-kpi-sub">With fuel data</div>
+            </div>
+        </div>
+
+        <!-- Chart -->
+        <div class="fpd-chart-card">
+            <canvas id="fpdTrendCanvas" width="900" height="200"></canvas>
+        </div>
+
+        <!-- Table -->
+        <div class="fpd-table-card">
+            <div class="fpd-table-toolbar">
+                <span class="fpd-table-title">Per-Truck Breakdown</span>
+                <button id="fpdExportBtn" class="fpd-export-btn">⬇ Export CSV</button>
+            </div>
+            <table class="fpd-table">
+                <thead>
+                    <tr>
+                        <th data-fpd-sort="name">Truck</th>
+                        <th data-fpd-sort="miles">Miles</th>
+                        <th data-fpd-sort="fuelGallons">Fuel (gal)</th>
+                        <th data-fpd-sort="mpg" class="fpd-sort-desc">MPG</th>
+                        <th data-fpd-sort="engineHours">Eng Hrs</th>
+                        <th data-fpd-sort="idlePct">Idle %</th>
+                        <th data-fpd-sort="idleGallons">Idle Fuel (gal)</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="fpdTableBody">
+                    <tr><td colspan="8" class="fpd-empty">Select a date range and click Apply to load data.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div><!-- /fpdFleetView -->
+
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- DRILL-DOWN VIEW                                               -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <div id="fpdDrillView" style="display:none;">
+
+        <div class="fpd-drill-header">
+            <button id="fpdDrillBackBtn" class="fpd-back-btn">← Back</button>
+            <span id="fpdDrillTitle" class="fpd-drill-title">Truck Detail</span>
+        </div>
+
+        <div class="fpd-drill-kpis">
+            <div class="fpd-drill-kpi" id="fpdDrillMPG">-- MPG</div>
+            <div class="fpd-drill-kpi" id="fpdDrillHours">-- hrs</div>
+            <div class="fpd-drill-kpi" id="fpdDrillIdle">-- idle</div>
+        </div>
+
+        <div class="fpd-chart-card">
+            <canvas id="fpdDrillCanvas" width="900" height="200"></canvas>
+        </div>
+
+        <div class="fpd-table-card" style="padding:16px;">
+            <div class="fpd-idle-list-title">Idling Events (most recent 20)</div>
+            <ul id="fpdDrillIdleList" class="fpd-idle-list">
+                <li>Loading…</li>
+            </ul>
+        </div>
+
+    </div><!-- /fpdDrillView -->
+
+</div><!-- /fpdContainer -->
+
+<script>
+/**
+ * constants.js — Fleet Performance Dashboard constants.
+ */
+var FPD = FPD || {};
+
+FPD.Constants = {
+    LITERS_PER_GALLON: 3.78541,
+    KM_PER_MILE: 1.60934,
+    DEFAULT_FROM_DAYS: 30,
+    IDLE_TARGET_PCT: 5.0,
+    DIAGNOSTIC_ENGINE_HOURS: "DiagnosticEngineHoursId",
+    RESULTS_LIMIT: 50000,
+    GROUP_COMPANY_ID: "GroupCompanyId"
+};
+
+</script>
+<script>
+/**
+ * deviceCache.js — Caches Device + Group data via multiCall at startup.
+ * Provides O(1) lookups by device ID.
+ */
+var FPD = FPD || {};
+
+FPD.DeviceCache = (function () {
+    "use strict";
+
+    var _devices = {};   // id → device object
+    var _groups = {};    // id → group object
+    var _loaded = false;
+
+    function load(api) {
+        return new Promise(function (resolve, reject) {
+            api.multiCall([
+                ["Get", { typeName: "Device", resultsLimit: 50000 }],
+                ["Get", { typeName: "Group", resultsLimit: 10000 }]
+            ], function (results) {
+                var deviceList = results[0];
+                var groupList = results[1];
+
+                _devices = {};
+                deviceList.forEach(function (d) { _devices[d.id] = d; });
+
+                _groups = {};
+                groupList.forEach(function (g) { _groups[g.id] = g; });
+
+                _loaded = true;
+                resolve();
+            }, function (err) {
+                reject(err);
+            });
+        });
+    }
+
+    function getDevice(id) { return _devices[id] || null; }
+
+    function getAllDevices() {
+        return Object.keys(_devices).map(function (id) { return _devices[id]; });
+    }
+
+    function getAllGroups() {
+        return Object.keys(_groups).map(function (id) { return _groups[id]; });
+    }
+
+    function getGroupName(id) {
+        var g = _groups[id];
+        return g ? (g.name || id) : id;
+    }
+
+    // Returns devices whose groups array includes the given groupId (recursive via group children)
+    function getDevicesInGroup(groupId) {
+        if (!groupId || groupId === FPD.Constants.GROUP_COMPANY_ID) {
+            return getAllDevices();
+        }
+        // Collect all descendant group IDs
+        var groupIds = {};
+        function collectDescendants(gid) {
+            groupIds[gid] = true;
+            var g = _groups[gid];
+            if (g && g.children) {
+                g.children.forEach(function (child) { collectDescendants(child.id); });
+            }
+        }
+        collectDescendants(groupId);
+
+        return getAllDevices().filter(function (d) {
+            return d.groups && d.groups.some(function (gr) { return groupIds[gr.id]; });
+        });
+    }
+
+    function isLoaded() { return _loaded; }
+
+    return { load, getDevice, getAllDevices, getAllGroups, getGroupName, getDevicesInGroup, isLoaded };
+})();
+
+</script>
+<script>
+/**
+ * dataService.js — API calls for Fleet Performance Dashboard.
+ * Fetches FuelUsed, Engine Hours (StatusData), and Idling (ExceptionEvent).
+ */
+var FPD = FPD || {};
+
+FPD.DataService = (function () {
+    "use strict";
+
+    var C = FPD.Constants;
+
+    /**
+     * Load fleet performance data for the given filters.
+     * @param {Object} api - MyGeotab API object
+     * @param {Object} options - { groupId, deviceIds, fromDate, toDate }
+     * @param {Function} callback - function(err, data) where data = { byDevice, fleet }
+     */
+    function loadFleetData(api, options, callback) {
+        var fromDate = options.fromDate.toISOString();
+        var toDate = options.toDate.toISOString();
+
+        // Build device search — either specific IDs or a group
+        var deviceSearch = {};
+        if (options.deviceIds && options.deviceIds.length > 0) {
+            deviceSearch.ids = options.deviceIds;
+        } else if (options.groupId && options.groupId !== C.GROUP_COMPANY_ID) {
+            deviceSearch.groups = [{ id: options.groupId }];
+        }
+
+        var fuelSearch = { fromDate: fromDate, toDate: toDate };
+        var ehSearch = {
+            diagnosticSearch: { id: C.DIAGNOSTIC_ENGINE_HOURS },
+            fromDate: fromDate,
+            toDate: toDate
+        };
+        var idleSearch = {
+            ruleSearch: { name: "Idling" },
+            fromDate: fromDate,
+            toDate: toDate
+        };
+
+        if (Object.keys(deviceSearch).length > 0) {
+            fuelSearch.deviceSearch = deviceSearch;
+            ehSearch.deviceSearch = deviceSearch;
+            idleSearch.deviceSearch = deviceSearch;
+        }
+
+        api.multiCall([
+            ["Get", { typeName: "FuelUsed", search: fuelSearch, resultsLimit: C.RESULTS_LIMIT }],
+            ["Get", { typeName: "StatusData", search: ehSearch, resultsLimit: C.RESULTS_LIMIT }],
+            ["Get", { typeName: "ExceptionEvent", search: idleSearch, resultsLimit: C.RESULTS_LIMIT }]
+        ], function (results) {
+            try {
+                var data = processResults(results[0], results[1], results[2]);
+                callback(null, data);
+            } catch (e) {
+                callback(e, null);
+            }
+        }, function (err) {
+            callback(err, null);
+        });
+    }
+
+    /**
+     * Load daily breakdown for a single device (for drill-down chart).
+     */
+    function loadDeviceDaily(api, deviceId, fromDate, toDate, callback) {
+        var search = {
+            deviceSearch: { id: deviceId },
+            fromDate: fromDate.toISOString(),
+            toDate: toDate.toISOString()
+        };
+
+        api.multiCall([
+            ["Get", { typeName: "FuelUsed", search: search, resultsLimit: C.RESULTS_LIMIT }],
+            ["Get", { typeName: "ExceptionEvent", search: Object.assign({}, search, { ruleSearch: { name: "Idling" } }), resultsLimit: C.RESULTS_LIMIT }]
+        ], function (results) {
+            callback(null, { fuelRecords: results[0], idleEvents: results[1] });
+        }, function (err) {
+            callback(err, null);
+        });
+    }
+
+    // ── Data Processing ─────────────────────────────────────────────
+
+    function processResults(fuelRecords, ehRecords, idleEvents) {
+        var byDevice = {};
+
+        // Process FuelUsed records → group by device
+        fuelRecords.forEach(function (r) {
+            var id = r.device && r.device.id;
+            if (!id) return;
+            if (!byDevice[id]) byDevice[id] = emptyDeviceRecord(id);
+            var d = byDevice[id];
+            d.fuelLiters += (r.volume || 0);
+            d.idleLiters += (r.idlingVolume || 0);
+            // FuelUsed.distance is in metres
+            d.distanceKm += ((r.distance || 0) / 1000);
+        });
+
+        // Process StatusData (engine hours) → first + last reading per device
+        var ehByDevice = {};
+        ehRecords.forEach(function (r) {
+            var id = r.device && r.device.id;
+            if (!id) return;
+            if (!ehByDevice[id]) ehByDevice[id] = { first: null, last: null };
+            var dt = new Date(r.dateTime).getTime();
+            var entry = ehByDevice[id];
+            if (!entry.first || dt < entry.first.t) entry.first = { t: dt, v: r.data };
+            if (!entry.last || dt > entry.last.t) entry.last = { t: dt, v: r.data };
+        });
+
+        Object.keys(ehByDevice).forEach(function (id) {
+            if (!byDevice[id]) byDevice[id] = emptyDeviceRecord(id);
+            var entry = ehByDevice[id];
+            if (entry.first && entry.last) {
+                // Engine hours are stored as seconds in StatusData.data
+                byDevice[id].engineHours = (entry.last.v - entry.first.v) / 3600;
+            }
+        });
+
+        // Process ExceptionEvent (idling) → total duration per device
+        idleEvents.forEach(function (e) {
+            var id = e.device && e.device.id;
+            if (!id) return;
+            if (!byDevice[id]) byDevice[id] = emptyDeviceRecord(id);
+            var dur = 0;
+            if (e.activeFrom && e.activeTo) {
+                dur = (new Date(e.activeTo) - new Date(e.activeFrom)) / 1000 / 60; // minutes
+            }
+            byDevice[id].idleEventCount += 1;
+            byDevice[id].idleMinutes += dur;
+        });
+
+        // Compute derived metrics
+        var totalMPG = 0, totalIdlePct = 0, totalEngHrs = 0, validMPG = 0;
+        Object.keys(byDevice).forEach(function (id) {
+            var d = byDevice[id];
+            var gallons = d.fuelLiters / C.LITERS_PER_GALLON;
+            var miles = d.distanceKm / C.KM_PER_MILE;
+            d.fuelGallons = gallons;
+            d.miles = miles;
+            d.mpg = (gallons > 0.5 && miles > 1) ? miles / gallons : 0;
+            d.idlePct = (d.fuelLiters > 0) ? (d.idleLiters / d.fuelLiters) * 100 : 0;
+            d.idleGallons = d.idleLiters / C.LITERS_PER_GALLON;
+            if (d.mpg > 0) { totalMPG += d.mpg; validMPG++; }
+            totalIdlePct += d.idlePct;
+            totalEngHrs += d.engineHours;
+        });
+
+        var count = Object.keys(byDevice).length || 1;
+        var fleet = {
+            avgMPG: validMPG > 0 ? totalMPG / validMPG : 0,
+            avgIdlePct: totalIdlePct / count,
+            totalEngineHours: totalEngHrs,
+            deviceCount: count
+        };
+
+        return { byDevice: byDevice, fleet: fleet };
+    }
+
+    function emptyDeviceRecord(id) {
+        return {
+            deviceId: id,
+            fuelLiters: 0, idleLiters: 0, distanceKm: 0,
+            engineHours: 0, idleEventCount: 0, idleMinutes: 0,
+            // computed later:
+            fuelGallons: 0, miles: 0, mpg: 0, idlePct: 0, idleGallons: 0
+        };
+    }
+
+    return { loadFleetData, loadDeviceDaily };
+})();
+
+</script>
+<script>
+/**
+ * charts.js — Canvas-based charts for Fleet Performance Dashboard.
+ */
+var FPD = FPD || {};
+
+FPD.Charts = (function () {
+    "use strict";
+
+    var C = FPD.Constants;
+
+    // ── Line Chart ────────────────────────────────────────────────────
+
+    /**
+     * Draw an MPG trend line chart on a canvas element.
+     * @param {HTMLCanvasElement} canvas
+     * @param {Array} points - [{ label, value }]
+     * @param {Object} opts - { title, color, targetLine, yLabel }
+     */
+    function drawLineChart(canvas, points, opts) {
+        if (!canvas || !points || points.length === 0) return;
+        opts = opts || {};
+        var ctx = canvas.getContext("2d");
+        var W = canvas.width, H = canvas.height;
+        var PAD = { top: 36, right: 20, bottom: 48, left: 56 };
+        var chartW = W - PAD.left - PAD.right;
+        var chartH = H - PAD.top - PAD.bottom;
+
+        ctx.clearRect(0, 0, W, H);
+
+        // Background
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, W, H);
+
+        // Data range
+        var values = points.map(function (p) { return p.value; }).filter(function (v) { return v > 0; });
+        if (values.length === 0) {
+            drawEmpty(ctx, W, H, "No data for selected period");
+            return;
+        }
+        var minV = Math.min.apply(null, values) * 0.9;
+        var maxV = Math.max.apply(null, values) * 1.1;
+        if (opts.targetLine) {
+            minV = Math.min(minV, opts.targetLine * 0.9);
+            maxV = Math.max(maxV, opts.targetLine * 1.1);
+        }
+        var range = maxV - minV || 1;
+
+        function xPos(i) { return PAD.left + (i / (points.length - 1 || 1)) * chartW; }
+        function yPos(v) { return PAD.top + chartH - ((v - minV) / range) * chartH; }
+
+        // Grid lines
+        ctx.strokeStyle = "#f0f0f0";
+        ctx.lineWidth = 1;
+        for (var gi = 0; gi <= 4; gi++) {
+            var gy = PAD.top + (gi / 4) * chartH;
+            ctx.beginPath(); ctx.moveTo(PAD.left, gy); ctx.lineTo(PAD.left + chartW, gy); ctx.stroke();
+            var gVal = maxV - (gi / 4) * range;
+            ctx.fillStyle = "#9e9e9e";
+            ctx.font = "11px -apple-system, sans-serif";
+            ctx.textAlign = "right";
+            ctx.fillText(gVal.toFixed(1), PAD.left - 6, gy + 4);
+        }
+
+        // Target line
+        if (opts.targetLine) {
+            var ty = yPos(opts.targetLine);
+            ctx.save();
+            ctx.strokeStyle = "#ff9800";
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([6, 4]);
+            ctx.beginPath(); ctx.moveTo(PAD.left, ty); ctx.lineTo(PAD.left + chartW, ty); ctx.stroke();
+            ctx.fillStyle = "#ff9800";
+            ctx.font = "11px -apple-system, sans-serif";
+            ctx.textAlign = "left";
+            ctx.fillText("Target " + opts.targetLine.toFixed(1), PAD.left + 4, ty - 4);
+            ctx.restore();
+        }
+
+        // Area fill
+        ctx.beginPath();
+        var color = opts.color || "#1976d2";
+        var firstValid = -1;
+        points.forEach(function (p, i) {
+            if (p.value <= 0) return;
+            if (firstValid < 0) firstValid = i;
+            var x = xPos(i), y = yPos(p.value);
+            if (firstValid === i) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        });
+        ctx.save();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2.5;
+        ctx.lineJoin = "round";
+        ctx.stroke();
+        // Fill under
+        if (firstValid >= 0) {
+            ctx.lineTo(xPos(points.length - 1), PAD.top + chartH);
+            ctx.lineTo(xPos(firstValid), PAD.top + chartH);
+            ctx.closePath();
+            var grad = ctx.createLinearGradient(0, PAD.top, 0, PAD.top + chartH);
+            grad.addColorStop(0, color.replace(")", ",0.18)").replace("rgb", "rgba").replace("#", "rgba(").replace(")", ",0.18)"));
+            grad.addColorStop(1, "rgba(255,255,255,0)");
+            ctx.fillStyle = color + "22";
+            ctx.fill();
+        }
+        ctx.restore();
+
+        // Data points
+        points.forEach(function (p, i) {
+            if (p.value <= 0) return;
+            ctx.beginPath();
+            ctx.arc(xPos(i), yPos(p.value), 3.5, 0, Math.PI * 2);
+            ctx.fillStyle = color;
+            ctx.fill();
+        });
+
+        // X-axis labels (show every Nth)
+        var step = Math.max(1, Math.ceil(points.length / 7));
+        ctx.fillStyle = "#9e9e9e";
+        ctx.font = "10px -apple-system, sans-serif";
+        ctx.textAlign = "center";
+        points.forEach(function (p, i) {
+            if (i % step !== 0 && i !== points.length - 1) return;
+            ctx.fillText(p.label, xPos(i), PAD.top + chartH + 18);
+        });
+
+        // Title
+        if (opts.title) {
+            ctx.fillStyle = "#424242";
+            ctx.font = "bold 13px -apple-system, sans-serif";
+            ctx.textAlign = "left";
+            ctx.fillText(opts.title, PAD.left, 22);
+        }
+
+        // Y-axis label
+        if (opts.yLabel) {
+            ctx.save();
+            ctx.translate(14, PAD.top + chartH / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillStyle = "#9e9e9e";
+            ctx.font = "11px -apple-system, sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillText(opts.yLabel, 0, 0);
+            ctx.restore();
+        }
+    }
+
+    function drawEmpty(ctx, W, H, msg) {
+        ctx.fillStyle = "#bdbdbd";
+        ctx.font = "13px -apple-system, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText(msg || "No data", W / 2, H / 2);
+    }
+
+    /**
+     * Build daily MPG points from FuelUsed records.
+     * @param {Array} fuelRecords
+     * @param {Date} fromDate
+     * @param {Date} toDate
+     * @returns {Array} [{ label: "Jun 1", value: mpg }]
+     */
+    function buildDailyMPGPoints(fuelRecords, fromDate, toDate) {
+        var byDay = {};
+        fuelRecords.forEach(function (r) {
+            if (!r.dateTime) return;
+            var d = new Date(r.dateTime);
+            var key = d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+            if (!byDay[key]) byDay[key] = { fuelL: 0, distM: 0 };
+            byDay[key].fuelL += (r.volume || 0);
+            byDay[key].distM += (r.distance || 0);
+        });
+
+        var points = [];
+        var cur = new Date(fromDate);
+        cur.setHours(0, 0, 0, 0);
+        var end = new Date(toDate);
+        while (cur <= end) {
+            var key = cur.getFullYear() + "-" + pad(cur.getMonth() + 1) + "-" + pad(cur.getDate());
+            var dayData = byDay[key];
+            var mpg = 0;
+            if (dayData && dayData.fuelL > 0.1) {
+                var gallons = dayData.fuelL / FPD.Constants.LITERS_PER_GALLON;
+                var miles = dayData.distM / 1000 / FPD.Constants.KM_PER_MILE;
+                mpg = miles / gallons;
+            }
+            var label = (cur.getMonth() + 1) + "/" + cur.getDate();
+            points.push({ label: label, value: mpg });
+            cur.setDate(cur.getDate() + 1);
+        }
+        return points;
+    }
+
+    function pad(n) { return n < 10 ? "0" + n : "" + n; }
+
+    return { drawLineChart, buildDailyMPGPoints };
+})();
+
+</script>
+<script>
+/**
+ * main.js — Fleet Performance Dashboard MyGeotab Add-in.
+ * Factory: geotab.addin.fleetPerformance
+ */
+geotab.addin.fleetPerformance = function () {
+    "use strict";
+
+    var api, state;
+    var currentData = null;       // last loaded { byDevice, fleet }
+    var currentFromDate = null;
+    var currentToDate = null;
+    var sortKey = "mpg";
+    var sortDir = -1;             // -1 = desc
+    var searchFilter = "";
+    var drillDeviceId = null;
+
+    // ── DOM refs (assigned in initialize) ───────────────────────────
+    var el = {};
+
+    // ── Lifecycle ────────────────────────────────────────────────────
+
+    return {
+        initialize: function (freshApi, freshState, callback) {
+            api = freshApi;
+            state = freshState;
+            cacheEls();
+            bindEvents();
+            setDefaultDates(30);
+            showView("fleet");
+
+            FPD.DeviceCache.load(api).then(function () {
+                populateGroupDropdown();
+                callback();
+            }).catch(function (err) {
+                showError("Failed to load device data: " + err);
+                callback();
+            });
+        },
+
+        focus: function () {
+            if (!currentData) applyFilters();
+        },
+
+        blur: function () {}
+    };
+
+    // ── DOM helpers ──────────────────────────────────────────────────
+
+    function cacheEls() {
+        var ids = [
+            "fpdFleetView", "fpdDrillView",
+            "fpdGroupSelect", "fpdSearchInput",
+            "fpdFromDate", "fpdToDate",
+            "fpdApplyBtn",
+            "fpdKpiMPG", "fpdKpiHours", "fpdKpiIdle", "fpdKpiCount",
+            "fpdTrendCanvas",
+            "fpdTableBody",
+            "fpdExportBtn",
+            "fpdLoading", "fpdError", "fpdErrorMsg",
+            "fpdDrillTitle", "fpdDrillMPG", "fpdDrillHours", "fpdDrillIdle",
+            "fpdDrillCanvas", "fpdDrillIdleList", "fpdDrillBackBtn"
+        ];
+        ids.forEach(function (id) { el[id] = document.getElementById(id); });
+    }
+
+    function bindEvents() {
+        el.fpdApplyBtn.addEventListener("click", applyFilters);
+
+        // Preset date buttons
+        document.querySelectorAll("[data-fpd-days]").forEach(function (btn) {
+            btn.addEventListener("click", function () {
+                document.querySelectorAll("[data-fpd-days]").forEach(function (b) { b.classList.remove("fpd-preset-active"); });
+                btn.classList.add("fpd-preset-active");
+                setDefaultDates(parseInt(btn.getAttribute("data-fpd-days"), 10));
+            });
+        });
+
+        el.fpdSearchInput.addEventListener("input", function () {
+            searchFilter = el.fpdSearchInput.value.toLowerCase();
+            if (currentData) renderTable();
+        });
+
+        el.fpdExportBtn.addEventListener("click", exportCSV);
+        el.fpdDrillBackBtn.addEventListener("click", function () { showView("fleet"); });
+
+        // Sortable column headers
+        document.querySelectorAll("[data-fpd-sort]").forEach(function (th) {
+            th.addEventListener("click", function () {
+                var key = th.getAttribute("data-fpd-sort");
+                if (sortKey === key) { sortDir *= -1; } else { sortKey = key; sortDir = -1; }
+                updateSortHeaders();
+                if (currentData) renderTable();
+            });
+        });
+    }
+
+    function setDefaultDates(days) {
+        var to = new Date();
+        var from = new Date(to.getTime() - days * 24 * 60 * 60 * 1000);
+        el.fpdFromDate.value = dateToInput(from);
+        el.fpdToDate.value = dateToInput(to);
+    }
+
+    function populateGroupDropdown() {
+        var groups = FPD.DeviceCache.getAllGroups()
+            .filter(function (g) { return g.name && g.name !== ""; })
+            .sort(function (a, b) { return a.name.localeCompare(b.name); });
+
+        el.fpdGroupSelect.innerHTML = '<option value="">All Vehicles</option>';
+        groups.forEach(function (g) {
+            var opt = document.createElement("option");
+            opt.value = g.id;
+            opt.textContent = g.name;
+            el.fpdGroupSelect.appendChild(opt);
+        });
+    }
+
+    // ── Data Loading ─────────────────────────────────────────────────
+
+    function applyFilters() {
+        var fromDate = new Date(el.fpdFromDate.value);
+        var toDate = new Date(el.fpdToDate.value);
+        toDate.setHours(23, 59, 59, 999);
+
+        if (isNaN(fromDate) || isNaN(toDate) || fromDate >= toDate) {
+            showError("Please select a valid date range.");
+            return;
+        }
+
+        currentFromDate = fromDate;
+        currentToDate = toDate;
+
+        var groupId = el.fpdGroupSelect.value;
+        var searchText = el.fpdSearchInput.value.toLowerCase();
+
+        // If user typed a search, find matching device IDs
+        var deviceIds = null;
+        if (searchText.length > 1) {
+            deviceIds = FPD.DeviceCache.getDevicesInGroup(groupId)
+                .filter(function (d) {
+                    return (d.name || "").toLowerCase().indexOf(searchText) >= 0 ||
+                           (d.serialNumber || "").toLowerCase().indexOf(searchText) >= 0;
+                })
+                .map(function (d) { return d.id; });
+            if (deviceIds.length === 0) {
+                showError("No trucks match your search.");
+                return;
+            }
+        }
+
+        showLoading(true);
+        hideError();
+
+        FPD.DataService.loadFleetData(api, {
+            groupId: groupId,
+            deviceIds: deviceIds,
+            fromDate: fromDate,
+            toDate: toDate
+        }, function (err, data) {
+            showLoading(false);
+            if (err) { showError("Failed to load data: " + (err.message || err)); return; }
+            currentData = data;
+            renderDashboard();
+        });
+    }
+
+    // ── Rendering ─────────────────────────────────────────────────────
+
+    function renderDashboard() {
+        renderKPIs();
+        renderTrendChart();
+        renderTable();
+    }
+
+    function renderKPIs() {
+        var f = currentData.fleet;
+        el.fpdKpiMPG.textContent = f.avgMPG > 0 ? f.avgMPG.toFixed(2) : "--";
+        el.fpdKpiHours.textContent = f.totalEngineHours > 0 ? Math.round(f.totalEngineHours).toLocaleString() : "--";
+
+        var idlePct = f.avgIdlePct;
+        el.fpdKpiIdle.textContent = idlePct > 0 ? idlePct.toFixed(1) + "%" : "--";
+        el.fpdKpiIdle.parentElement.classList.toggle("fpd-kpi-warn", idlePct > FPD.Constants.IDLE_TARGET_PCT);
+
+        el.fpdKpiCount.textContent = f.deviceCount.toLocaleString();
+    }
+
+    function renderTrendChart() {
+        if (!el.fpdTrendCanvas || !currentData) return;
+        // Build fleet-level daily MPG using all FuelUsed — simplified: aggregate from byDevice
+        // For trend chart we need raw records; use a separate daily call isn't done here.
+        // Instead render a bar of per-device MPG distribution for quick overview.
+        var devices = getFilteredDevices();
+        var mpgValues = devices
+            .filter(function (d) { return d.mpg > 0; })
+            .map(function (d) { return { label: (FPD.DeviceCache.getDevice(d.deviceId) || {}).name || d.deviceId, value: d.mpg }; })
+            .sort(function (a, b) { return b.value - a.value; })
+            .slice(0, 20);
+
+        FPD.Charts.drawLineChart(el.fpdTrendCanvas, mpgValues, {
+            title: "MPG by Truck (top 20)",
+            color: "#1976d2",
+            targetLine: currentData.fleet.avgMPG,
+            yLabel: "MPG"
+        });
+    }
+
+    function renderTable() {
+        if (!currentData || !el.fpdTableBody) return;
+        var devices = getFilteredDevices();
+
+        // Sort
+        devices.sort(function (a, b) {
+            var av = a[sortKey] || 0, bv = b[sortKey] || 0;
+            return sortDir * (bv - av);
+        });
+
+        if (devices.length === 0) {
+            el.fpdTableBody.innerHTML = '<tr><td colspan="8" class="fpd-empty">No trucks found for this period.</td></tr>';
+            return;
+        }
+
+        el.fpdTableBody.innerHTML = devices.map(function (d) {
+            var dev = FPD.DeviceCache.getDevice(d.deviceId) || {};
+            var name = dev.name || d.deviceId;
+            var idleClass = d.idlePct > FPD.Constants.IDLE_TARGET_PCT ? " fpd-warn" : "";
+            return '<tr class="fpd-row" data-device-id="' + d.deviceId + '">' +
+                '<td>' + esc(name) + '</td>' +
+                '<td>' + fmt(d.miles, 0) + '</td>' +
+                '<td>' + fmt(d.fuelGallons, 1) + '</td>' +
+                '<td><strong>' + (d.mpg > 0 ? d.mpg.toFixed(2) : "--") + '</strong></td>' +
+                '<td>' + (d.engineHours > 0 ? Math.round(d.engineHours).toLocaleString() : "--") + '</td>' +
+                '<td class="' + idleClass + '">' + (d.idlePct > 0 ? d.idlePct.toFixed(1) + "%" : "--") + '</td>' +
+                '<td>' + fmt(d.idleGallons, 1) + '</td>' +
+                '<td><button class="fpd-drill-btn" data-device-id="' + d.deviceId + '">Details</button></td>' +
+                '</tr>';
+        }).join("");
+
+        // Bind drill-down buttons
+        el.fpdTableBody.querySelectorAll(".fpd-drill-btn").forEach(function (btn) {
+            btn.addEventListener("click", function (e) {
+                e.stopPropagation();
+                openDrillDown(btn.getAttribute("data-device-id"));
+            });
+        });
+    }
+
+    function getFilteredDevices() {
+        if (!currentData) return [];
+        return Object.values(currentData.byDevice).filter(function (d) {
+            if (!searchFilter) return true;
+            var dev = FPD.DeviceCache.getDevice(d.deviceId) || {};
+            return (dev.name || "").toLowerCase().indexOf(searchFilter) >= 0 ||
+                   (dev.serialNumber || "").toLowerCase().indexOf(searchFilter) >= 0;
+        });
+    }
+
+    // ── Drill-Down ───────────────────────────────────────────────────
+
+    function openDrillDown(deviceId) {
+        var dev = FPD.DeviceCache.getDevice(deviceId) || {};
+        var d = currentData.byDevice[deviceId];
+        drillDeviceId = deviceId;
+
+        el.fpdDrillTitle.textContent = dev.name || deviceId;
+        el.fpdDrillMPG.textContent = d && d.mpg > 0 ? d.mpg.toFixed(2) + " MPG" : "-- MPG";
+        el.fpdDrillHours.textContent = d && d.engineHours > 0 ? Math.round(d.engineHours).toLocaleString() + " hrs" : "-- hrs";
+        el.fpdDrillIdle.textContent = d && d.idlePct > 0 ? d.idlePct.toFixed(1) + "% idle" : "-- idle";
+
+        showView("drill");
+
+        // Load daily breakdown for this device
+        FPD.DataService.loadDeviceDaily(api, deviceId, currentFromDate, currentToDate, function (err, data) {
+            if (err || !data) return;
+            var points = FPD.Charts.buildDailyMPGPoints(data.fuelRecords, currentFromDate, currentToDate);
+            FPD.Charts.drawLineChart(el.fpdDrillCanvas, points, {
+                title: "Daily MPG — " + (dev.name || deviceId),
+                color: "#1976d2",
+                yLabel: "MPG"
+            });
+            renderIdleList(data.idleEvents);
+        });
+    }
+
+    function renderIdleList(events) {
+        if (!el.fpdDrillIdleList) return;
+        if (!events || events.length === 0) {
+            el.fpdDrillIdleList.innerHTML = "<li>No idling events in this period.</li>";
+            return;
+        }
+        var sorted = events.slice().sort(function (a, b) {
+            return new Date(b.activeFrom) - new Date(a.activeFrom);
+        }).slice(0, 20);
+
+        el.fpdDrillIdleList.innerHTML = sorted.map(function (e) {
+            var dur = e.activeFrom && e.activeTo
+                ? Math.round((new Date(e.activeTo) - new Date(e.activeFrom)) / 1000 / 60)
+                : 0;
+            var dt = e.activeFrom ? new Date(e.activeFrom).toLocaleDateString() : "";
+            return "<li>" + esc(dt) + " &mdash; " + dur + " min</li>";
+        }).join("");
+    }
+
+    // ── Export ───────────────────────────────────────────────────────
+
+    function exportCSV() {
+        if (!currentData) return;
+        var rows = [["Truck", "Miles", "Fuel (gal)", "MPG", "Engine Hours", "Idle %", "Idle Fuel (gal)"]];
+        getFilteredDevices().forEach(function (d) {
+            var dev = FPD.DeviceCache.getDevice(d.deviceId) || {};
+            rows.push([
+                dev.name || d.deviceId,
+                d.miles.toFixed(1),
+                d.fuelGallons.toFixed(1),
+                d.mpg > 0 ? d.mpg.toFixed(2) : "",
+                d.engineHours > 0 ? Math.round(d.engineHours) : "",
+                d.idlePct > 0 ? d.idlePct.toFixed(1) : "",
+                d.idleGallons.toFixed(1)
+            ]);
+        });
+        var csv = rows.map(function (r) { return r.map(function (c) { return '"' + String(c).replace(/"/g, '""') + '"'; }).join(","); }).join("\n");
+        var blob = new Blob([csv], { type: "text/csv" });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = "fleet-performance-" + dateToInput(new Date()) + ".csv";
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    // ── UI Helpers ───────────────────────────────────────────────────
+
+    function showView(view) {
+        el.fpdFleetView.style.display = view === "fleet" ? "" : "none";
+        el.fpdDrillView.style.display = view === "drill" ? "" : "none";
+    }
+
+    function showLoading(show) {
+        if (el.fpdLoading) el.fpdLoading.style.display = show ? "" : "none";
+    }
+
+    function showError(msg) {
+        if (el.fpdError) el.fpdError.style.display = "";
+        if (el.fpdErrorMsg) el.fpdErrorMsg.textContent = msg;
+    }
+
+    function hideError() {
+        if (el.fpdError) el.fpdError.style.display = "none";
+    }
+
+    function updateSortHeaders() {
+        document.querySelectorAll("[data-fpd-sort]").forEach(function (th) {
+            th.classList.remove("fpd-sort-asc", "fpd-sort-desc");
+            if (th.getAttribute("data-fpd-sort") === sortKey) {
+                th.classList.add(sortDir > 0 ? "fpd-sort-asc" : "fpd-sort-desc");
+            }
+        });
+    }
+
+    function dateToInput(d) {
+        return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+    }
+
+    function pad(n) { return n < 10 ? "0" + n : "" + n; }
+    function fmt(v, dec) { return v > 0 ? v.toFixed(dec).toLocaleString() : "--"; }
+    function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+};
+
+</script>
+</body>
+</html>

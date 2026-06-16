@@ -1,0 +1,16 @@
+{
+    "name": "Fleet Performance Dashboard",
+    "supportEmail": "niteshmistry@geotab.com",
+    "version": "1.0",
+    "items": [
+        {
+            "url": "https://niteshmistry-sig.github.io/addin-fleet-performance/index.html",
+            "path": "GettingStartedLink/",
+            "menuName": {
+                "en": "Fleet Performance"
+            },
+            "svgIcon": "https://niteshmistry-sig.github.io/addin-fleet-performance/images/icon.svg"
+        }
+    ],
+    "isSigned": false
+}

@@ -1,0 +1,356 @@
+/*
+ * style.css — Fleet Performance Dashboard
+ * All selectors scoped under #fpdContainer for MyGeotab CSS isolation.
+ */
+
+:root {
+    --fpd-color-primary: #1976d2;
+    --fpd-color-primary-light: #e3f2fd;
+    --fpd-color-success: #2e7d32;
+    --fpd-color-success-light: #e8f5e9;
+    --fpd-color-warning: #ed6c02;
+    --fpd-color-warning-light: #fff3e0;
+    --fpd-color-error: #d32f2f;
+    --fpd-color-error-light: #ffebee;
+    --fpd-color-text: #212121;
+    --fpd-color-text-secondary: #616161;
+    --fpd-color-border: #e0e0e0;
+    --fpd-color-bg: #f5f5f5;
+    --fpd-color-surface: #ffffff;
+    --fpd-radius: 8px;
+    --fpd-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
+    --fpd-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --fpd-space-xs: 4px;
+    --fpd-space-sm: 8px;
+    --fpd-space-md: 16px;
+    --fpd-space-lg: 24px;
+    --fpd-space-xl: 32px;
+}
+
+#fpdContainer {
+    font-family: var(--fpd-font) !important;
+    color: var(--fpd-color-text) !important;
+    background: var(--fpd-color-bg) !important;
+    padding: var(--fpd-space-lg) !important;
+    min-height: 100% !important;
+    position: relative !important;
+    line-height: 1.5 !important;
+    font-size: 14px !important;
+}
+
+#fpdContainer#fpdContainer *, #fpdContainer#fpdContainer *::before, #fpdContainer#fpdContainer *::after {
+    box-sizing: border-box !important;
+}
+
+#fpdContainer#fpdContainer h1, #fpdContainer#fpdContainer h2, #fpdContainer#fpdContainer h3 {
+    font-family: var(--fpd-font) !important;
+    color: var(--fpd-color-text) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: none !important;
+}
+
+#fpdContainer#fpdContainer table {
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
+    width: 100% !important;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────── */
+
+#fpdContainer .fpd-header {
+    display: flex !important;
+    align-items: center !important;
+    gap: var(--fpd-space-md) !important;
+    margin-bottom: var(--fpd-space-lg) !important;
+}
+
+#fpdContainer .fpd-title {
+    font-size: 20px !important;
+    font-weight: 600 !important;
+    color: var(--fpd-color-text) !important;
+    flex: 1 !important;
+}
+
+/* ── Filter Bar ──────────────────────────────────────────────────────── */
+
+#fpdContainer .fpd-filters {
+    background: var(--fpd-color-surface) !important;
+    border-radius: var(--fpd-radius) !important;
+    box-shadow: var(--fpd-shadow) !important;
+    padding: var(--fpd-space-md) !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: var(--fpd-space-sm) !important;
+    align-items: center !important;
+    margin-bottom: var(--fpd-space-lg) !important;
+}
+
+#fpdContainer#fpdContainer .fpd-filters select,
+#fpdContainer#fpdContainer .fpd-filters input[type="text"],
+#fpdContainer#fpdContainer .fpd-filters input[type="date"] {
+    height: 36px !important;
+    padding: 0 var(--fpd-space-sm) !important;
+    border: 1px solid var(--fpd-color-border) !important;
+    border-radius: var(--fpd-radius) !important;
+    font-family: var(--fpd-font) !important;
+    font-size: 13px !important;
+    background: #fff !important;
+    color: var(--fpd-color-text) !important;
+    outline: none !important;
+}
+
+#fpdContainer .fpd-filters select { min-width: 160px !important; }
+#fpdContainer .fpd-filters input[type="text"] { min-width: 180px !important; }
+#fpdContainer .fpd-filters input[type="date"] { width: 140px !important; }
+
+#fpdContainer .fpd-preset-group {
+    display: flex !important;
+    gap: 2px !important;
+    border: 1px solid var(--fpd-color-border) !important;
+    border-radius: var(--fpd-radius) !important;
+    overflow: hidden !important;
+}
+
+#fpdContainer#fpdContainer .fpd-preset-btn {
+    padding: 0 var(--fpd-space-sm) !important;
+    height: 36px !important;
+    border: none !important;
+    background: #fff !important;
+    color: var(--fpd-color-text-secondary) !important;
+    font-family: var(--fpd-font) !important;
+    font-size: 13px !important;
+    cursor: pointer !important;
+}
+
+#fpdContainer#fpdContainer .fpd-preset-btn:hover { background: var(--fpd-color-primary-light) !important; }
+#fpdContainer#fpdContainer .fpd-preset-active {
+    background: var(--fpd-color-primary) !important;
+    color: #fff !important;
+}
+
+#fpdContainer .fpd-date-sep { color: var(--fpd-color-text-secondary) !important; font-size: 13px !important; }
+
+#fpdContainer#fpdContainer .fpd-apply-btn {
+    height: 36px !important;
+    padding: 0 var(--fpd-space-md) !important;
+    background: var(--fpd-color-primary) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: var(--fpd-radius) !important;
+    font-family: var(--fpd-font) !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+}
+
+#fpdContainer#fpdContainer .fpd-apply-btn:hover { background: #1565c0 !important; }
+
+/* ── KPI Cards ───────────────────────────────────────────────────────── */
+
+#fpdContainer .fpd-kpis {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
+    gap: var(--fpd-space-md) !important;
+    margin-bottom: var(--fpd-space-lg) !important;
+}
+
+#fpdContainer .fpd-kpi {
+    background: var(--fpd-color-surface) !important;
+    border-radius: var(--fpd-radius) !important;
+    box-shadow: var(--fpd-shadow) !important;
+    padding: var(--fpd-space-md) !important;
+    border-left: 4px solid var(--fpd-color-border) !important;
+}
+
+#fpdContainer .fpd-kpi-mpg { border-left-color: #1976d2 !important; }
+#fpdContainer .fpd-kpi-hours { border-left-color: #2e7d32 !important; }
+#fpdContainer .fpd-kpi-idle { border-left-color: #ff9800 !important; }
+#fpdContainer .fpd-kpi-idle.fpd-kpi-warn { border-left-color: #d32f2f !important; }
+#fpdContainer .fpd-kpi-count { border-left-color: #7b1fa2 !important; }
+
+#fpdContainer .fpd-kpi-label {
+    font-size: 11px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    color: var(--fpd-color-text-secondary) !important;
+    margin-bottom: var(--fpd-space-xs) !important;
+}
+
+#fpdContainer .fpd-kpi-value {
+    font-size: 28px !important;
+    font-weight: 700 !important;
+    color: var(--fpd-color-text) !important;
+    line-height: 1.1 !important;
+}
+
+#fpdContainer .fpd-kpi-sub {
+    font-size: 11px !important;
+    color: var(--fpd-color-text-secondary) !important;
+    margin-top: var(--fpd-space-xs) !important;
+}
+
+/* ── Chart Card ──────────────────────────────────────────────────────── */
+
+#fpdContainer .fpd-chart-card {
+    background: var(--fpd-color-surface) !important;
+    border-radius: var(--fpd-radius) !important;
+    box-shadow: var(--fpd-shadow) !important;
+    padding: var(--fpd-space-md) !important;
+    margin-bottom: var(--fpd-space-lg) !important;
+}
+
+#fpdContainer#fpdContainer canvas {
+    display: block !important;
+    width: 100% !important;
+    height: 200px !important;
+}
+
+/* ── Table Card ──────────────────────────────────────────────────────── */
+
+#fpdContainer .fpd-table-card {
+    background: var(--fpd-color-surface) !important;
+    border-radius: var(--fpd-radius) !important;
+    box-shadow: var(--fpd-shadow) !important;
+    overflow: hidden !important;
+    margin-bottom: var(--fpd-space-lg) !important;
+}
+
+#fpdContainer .fpd-table-toolbar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: var(--fpd-space-md) !important;
+    border-bottom: 1px solid var(--fpd-color-border) !important;
+}
+
+#fpdContainer .fpd-table-title { font-weight: 600 !important; font-size: 14px !important; }
+
+#fpdContainer#fpdContainer .fpd-export-btn {
+    padding: 6px var(--fpd-space-sm) !important;
+    border: 1px solid var(--fpd-color-border) !important;
+    border-radius: var(--fpd-radius) !important;
+    background: #fff !important;
+    font-family: var(--fpd-font) !important;
+    font-size: 12px !important;
+    cursor: pointer !important;
+    color: var(--fpd-color-text-secondary) !important;
+}
+
+#fpdContainer#fpdContainer .fpd-export-btn:hover { background: var(--fpd-color-bg) !important; }
+
+#fpdContainer#fpdContainer .fpd-table th {
+    background: var(--fpd-color-bg) !important;
+    padding: var(--fpd-space-sm) var(--fpd-space-md) !important;
+    text-align: left !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: var(--fpd-color-text-secondary) !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+    user-select: none !important;
+    border-bottom: 1px solid var(--fpd-color-border) !important;
+}
+
+#fpdContainer#fpdContainer .fpd-table th:hover { background: #eeeeee !important; }
+#fpdContainer#fpdContainer .fpd-table th.fpd-sort-desc::after { content: " ▼" !important; }
+#fpdContainer#fpdContainer .fpd-table th.fpd-sort-asc::after { content: " ▲" !important; }
+
+#fpdContainer#fpdContainer .fpd-table td {
+    padding: var(--fpd-space-sm) var(--fpd-space-md) !important;
+    border-bottom: 1px solid var(--fpd-color-border) !important;
+    font-size: 13px !important;
+    color: var(--fpd-color-text) !important;
+}
+
+#fpdContainer#fpdContainer .fpd-table .fpd-row:hover td { background: var(--fpd-color-primary-light) !important; }
+#fpdContainer#fpdContainer .fpd-table .fpd-warn { color: var(--fpd-color-warning) !important; font-weight: 600 !important; }
+#fpdContainer#fpdContainer .fpd-empty { text-align: center !important; padding: var(--fpd-space-xl) !important; color: var(--fpd-color-text-secondary) !important; }
+
+#fpdContainer#fpdContainer .fpd-drill-btn {
+    padding: 4px 10px !important;
+    border: 1px solid var(--fpd-color-primary) !important;
+    border-radius: var(--fpd-radius) !important;
+    background: #fff !important;
+    color: var(--fpd-color-primary) !important;
+    font-family: var(--fpd-font) !important;
+    font-size: 12px !important;
+    cursor: pointer !important;
+}
+
+#fpdContainer#fpdContainer .fpd-drill-btn:hover { background: var(--fpd-color-primary-light) !important; }
+
+/* ── Drill-Down View ─────────────────────────────────────────────────── */
+
+#fpdContainer .fpd-drill-header {
+    display: flex !important;
+    align-items: center !important;
+    gap: var(--fpd-space-md) !important;
+    margin-bottom: var(--fpd-space-lg) !important;
+}
+
+#fpdContainer#fpdContainer .fpd-back-btn {
+    padding: 6px var(--fpd-space-md) !important;
+    border: 1px solid var(--fpd-color-border) !important;
+    border-radius: var(--fpd-radius) !important;
+    background: #fff !important;
+    font-family: var(--fpd-font) !important;
+    font-size: 13px !important;
+    cursor: pointer !important;
+}
+
+#fpdContainer .fpd-drill-title { font-size: 18px !important; font-weight: 600 !important; }
+
+#fpdContainer .fpd-drill-kpis {
+    display: flex !important;
+    gap: var(--fpd-space-md) !important;
+    margin-bottom: var(--fpd-space-lg) !important;
+    flex-wrap: wrap !important;
+}
+
+#fpdContainer .fpd-drill-kpi {
+    background: var(--fpd-color-surface) !important;
+    border-radius: var(--fpd-radius) !important;
+    box-shadow: var(--fpd-shadow) !important;
+    padding: var(--fpd-space-md) var(--fpd-space-lg) !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    color: var(--fpd-color-primary) !important;
+}
+
+#fpdContainer .fpd-idle-list-title { font-weight: 600 !important; margin-bottom: var(--fpd-space-sm) !important; }
+
+#fpdContainer#fpdContainer .fpd-idle-list {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    max-height: 200px !important;
+    overflow-y: auto !important;
+}
+
+#fpdContainer#fpdContainer .fpd-idle-list li {
+    padding: var(--fpd-space-xs) 0 !important;
+    border-bottom: 1px solid var(--fpd-color-border) !important;
+    font-size: 13px !important;
+    color: var(--fpd-color-text-secondary) !important;
+}
+
+/* ── Loading / Error ─────────────────────────────────────────────────── */
+
+#fpdContainer .fpd-loading {
+    text-align: center !important;
+    padding: var(--fpd-space-xl) !important;
+    color: var(--fpd-color-text-secondary) !important;
+    font-size: 14px !important;
+}
+
+#fpdContainer .fpd-error {
+    background: var(--fpd-color-error-light) !important;
+    border-left: 4px solid var(--fpd-color-error) !important;
+    border-radius: var(--fpd-radius) !important;
+    padding: var(--fpd-space-md) !important;
+    margin-bottom: var(--fpd-space-md) !important;
+    color: var(--fpd-color-error) !important;
+    font-size: 13px !important;
+}
