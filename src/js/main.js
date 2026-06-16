@@ -80,10 +80,7 @@ geotab.addin.fleetPerformance = function () {
                 btn.classList.add("fpd-preset-active");
                 var days = parseInt(btn.getAttribute("data-fpd-days"), 10);
                 activeDays = days;
-                if (days === 0) {
-                    el.fpdCustomRange.classList.remove("fpd-hidden");
-                } else {
-                    el.fpdCustomRange.classList.add("fpd-hidden");
+                if (days > 0) {
                     setDatesFromDays(days);
                 }
             });

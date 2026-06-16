@@ -578,12 +578,12 @@
                     <button class="fpd-preset-btn" data-fpd-days="1">Yesterday</button>
                     <button class="fpd-preset-btn fpd-preset-active" data-fpd-days="7">Last 7 Days</button>
                     <button class="fpd-preset-btn" data-fpd-days="30">Last 30 Days</button>
-                    <button class="fpd-preset-btn" data-fpd-days="0">Custom</button>
+                    <button class="fpd-preset-btn" data-fpd-days="0">Custom Range</button>
                 </div>
             </div>
 
-            <!-- Custom date range (shown when Custom is active) -->
-            <div class="fpd-filterbar-section fpd-hidden" id="fpdCustomRange">
+            <!-- Date range — always visible, updated by preset buttons -->
+            <div class="fpd-filterbar-section" id="fpdCustomRange">
                 <input id="fpdFromDate" type="date" class="fpd-date" title="From">
                 <span class="fpd-date-sep">–</span>
                 <input id="fpdToDate" type="date" class="fpd-date" title="To">
@@ -1338,10 +1338,7 @@ geotab.addin.fleetPerformance = function () {
                 btn.classList.add("fpd-preset-active");
                 var days = parseInt(btn.getAttribute("data-fpd-days"), 10);
                 activeDays = days;
-                if (days === 0) {
-                    el.fpdCustomRange.classList.remove("fpd-hidden");
-                } else {
-                    el.fpdCustomRange.classList.add("fpd-hidden");
+                if (days > 0) {
                     setDatesFromDays(days);
                 }
             });
