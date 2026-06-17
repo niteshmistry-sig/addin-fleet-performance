@@ -21,11 +21,10 @@
     <!-- ══════════════════════════════════════════════════════════════ -->
     <div id="fpdFleetView">
 
-        <!-- Filter Bar -->
+        <!-- Filter Bar — two rows for iframe width compatibility -->
         <div class="fpd-filterbar">
-
-            <!-- Timeframe presets -->
-            <div class="fpd-filterbar-section">
+            <!-- Row 1: Timeframe + dates -->
+            <div class="fpd-filterbar-row">
                 <span class="fpd-filterbar-label">Timeframe</span>
                 <div class="fpd-preset-group">
                     <button class="fpd-preset-btn" data-fpd-days="1">Yesterday</button>
@@ -33,30 +32,22 @@
                     <button class="fpd-preset-btn" data-fpd-days="30">Last 30 Days</button>
                     <button class="fpd-preset-btn" data-fpd-days="0">Custom Range</button>
                 </div>
+                <div class="fpd-filterbar-section" id="fpdCustomRange">
+                    <input id="fpdFromDate" type="date" class="fpd-date" title="From">
+                    <span class="fpd-date-sep">–</span>
+                    <input id="fpdToDate" type="date" class="fpd-date" title="To">
+                </div>
             </div>
-
-            <!-- Date range — always visible, updated by preset buttons -->
-            <div class="fpd-filterbar-section" id="fpdCustomRange">
-                <input id="fpdFromDate" type="date" class="fpd-date" title="From">
-                <span class="fpd-date-sep">–</span>
-                <input id="fpdToDate" type="date" class="fpd-date" title="To">
-            </div>
-
-            <!-- Groups -->
-            <div class="fpd-filterbar-section">
+            <!-- Row 2: Groups + Vehicles + Apply -->
+            <div class="fpd-filterbar-row">
                 <span class="fpd-filterbar-label">Groups</span>
                 <select id="fpdGroupSelect" class="fpd-select">
                     <option value="">All Groups</option>
                 </select>
-            </div>
-
-            <!-- Vehicle search -->
-            <div class="fpd-filterbar-section">
                 <span class="fpd-filterbar-label">Vehicles</span>
                 <input id="fpdSearchInput" type="text" class="fpd-search" placeholder="Search units…">
+                <button id="fpdApplyBtn" class="fpd-apply-btn">Apply</button>
             </div>
-
-            <button id="fpdApplyBtn" class="fpd-apply-btn">Apply</button>
         </div>
 
         <!-- KPI Summary Row -->

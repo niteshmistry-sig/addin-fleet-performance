@@ -42,10 +42,16 @@
 #fpdContainer .fpd-filterbar {
     background: #ffffff !important;
     border-bottom: 1px solid #e0e0e0 !important;
-    padding: 10px 16px !important;
+    padding: 8px 16px !important;
     display: flex !important;
-    flex-wrap: wrap !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+}
+
+#fpdContainer .fpd-filterbar-row {
+    display: flex !important;
     align-items: center !important;
+    flex-wrap: wrap !important;
     gap: 8px !important;
 }
 
