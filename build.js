@@ -25,7 +25,7 @@ if (fs.existsSync(cssPath)) {
 }
 
 // Inline JS in order
-const jsFiles = ["constants.js", "deviceCache.js", "dataService.js", "charts.js", "main.js"];
+const jsFiles = ["styles.js", "constants.js", "deviceCache.js", "dataService.js", "charts.js", "main.js"];
 jsFiles.forEach(function (filename) {
     const jsPath = path.join(SRC, "js", filename);
     if (fs.existsSync(jsPath)) {

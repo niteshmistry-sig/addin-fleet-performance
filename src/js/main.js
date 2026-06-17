@@ -24,6 +24,7 @@ geotab.addin.fleetPerformance = function () {
         initialize: function (freshApi, freshState, callback) {
             api = freshApi;
             state = freshState;
+            FPD.injectStyles();
             cacheEls();
             bindEvents();
             setDatesFromDays(7);

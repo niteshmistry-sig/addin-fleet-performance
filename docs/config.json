@@ -4,7 +4,7 @@
     "version": "1.0",
     "items": [
         {
-            "url": "https://niteshmistry-sig.github.io/addin-fleet-performance/index.html",
+            "url": "https://niteshmistry-sig.github.io/addin-fleet-performance/index.html?v=2",
             "path": "GettingStartedLink/",
             "menuName": {
                 "en": "Fleet Performance"
